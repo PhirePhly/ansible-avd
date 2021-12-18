@@ -1,0 +1,26 @@
+{% if mac_access_lists is defined and mac_access_lists is not none %}
+
+## MAC Access-lists
+
+### MAC Access-lists Summary
+
+{%     for mac_access_list in mac_access_lists | arista.avd.natural_sort %}
+#### {{ mac_access_list }}
+{%       if mac_access_lists[mac_access_list].counters_per_entry is arista.avd.defined(true) %}
+
+ACL has counting mode `counters per-entry` enabled!
+{%       endif %}
+
+| Sequence | Action |
+| -------- | ------ |
+{%         for sequence in mac_access_lists[mac_access_list].sequence_numbers | arista.avd.natural_sort %}
+| {{ sequence }} | {{ mac_access_lists[mac_access_list].sequence_numbers[sequence].action }} |
+{%         endfor %}
+
+{%     endfor %}
+### MAC Extended Access-lists Device Configuration
+
+```eos
+{% include 'eos/mac-access-lists.j2' %}
+```
+{% endif %}
