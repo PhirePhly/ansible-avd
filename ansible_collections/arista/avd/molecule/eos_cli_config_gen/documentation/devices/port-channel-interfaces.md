@@ -81,6 +81,7 @@ interface Management1
 | Ethernet10/4 | LAG Member LACP fallback | *trunk | *112 | *- | *- | 104 |
 | Ethernet15 | DC1-AGG03_Ethernet1 | *trunk | *110,201 | *- | *- | 15 |
 | Ethernet16 | DC1-AGG04_Ethernet1 | *trunk | *110,201 | *- | *- | 16 |
+| Ethernet18 | LAG Member | *access | *110 | *- | *- | 105 |
 | Ethernet50 | SRV-POD03_Eth1 | *trunk | *110,201 | *- | *- | 5 |
 
 *Inherited from Port-Channel Interface
@@ -148,6 +149,10 @@ interface Ethernet17
    description LAG Member
    channel-group 17 mode active
 !
+interface Ethernet18
+   description LAG Member
+   channel-group 105 mode active
+!
 interface Ethernet50
    description SRV-POD03_Eth1
    channel-group 5 mode active
@@ -176,6 +181,7 @@ interface Ethernet50
 | Port-Channel102 | PVLAN Promiscuous Trunk - vlan translation out | switched | trunk | 110-112 | - | - | - | - | - | - |
 | Port-Channel103 | PVLAN Secondary Trunk | switched | trunk | 110-112 | - | - | - | - | - | - |
 | Port-Channel104 | LACP fallback individual | switched | trunk | 112 | - | - | 300 | individual | - | - |
+| Port-Channel105 | Molecule ACLs | switched | access | 110 | - | - | - | - | - | - |
 
 #### Private VLAN
 
@@ -355,6 +361,17 @@ interface Port-Channel104
    switchport mode trunk
    port-channel lacp fallback timeout 300
    port-channel lacp fallback individual
+!
+interface Port-Channel105
+   description Molecule ACLs
+   switchport
+   switchport access vlan 110
+   ip access-group IPV4_ACL_IN in
+   ip access-group IPV4_ACL_OUT out
+   ipv6 access-group IPV6_ACL_IN in
+   ipv6 access-group IPV6_ACL_OUT out
+   mac access-group MAC_ACL_IN in
+   mac access-group MAC_ACL_OUT out
 ```
 
 # Routing
